@@ -19,6 +19,9 @@ engine = create_engine("mysql+pymysql://stocklab:stocklab@localhost:13306/stock_
 
 `pip install pandas sqlalchemy pymysql`
 
+> pandas 2.x 의 `pd.to_numeric(..., errors="ignore")` 는 3.0 에서 제거됐다.
+> DECIMAL 컬럼은 이름을 알고 있으니 `astype(float)` 으로 명시하는 편이 안전하다.
+
 **DECIMAL 컬럼은 `Decimal` 객체로 온다.** 연산 전에 float으로 바꿔야 한다.
 
 ```python
@@ -289,12 +292,16 @@ from sqlalchemy import create_engine
 
 engine = create_engine("mysql+pymysql://stocklab:stocklab@localhost:13306/stock_lab")
 
+# DECIMAL 컬럼은 Decimal 객체로 온다. 연산 전에 float 으로 바꿔야 한다.
+DECIMAL_COLUMNS = {"open_price", "high_price", "low_price", "close_price",
+                   "short_amount", "short_volume_rate", "short_amount_rate"}
+
+
 def load(table, cols):
     df = pd.read_sql(f"SELECT {cols} FROM {table} ORDER BY symbol, trade_date",
                      engine, parse_dates=["trade_date"])
-    for c in df.select_dtypes("object").columns:
-        if c != "symbol":
-            df[c] = pd.to_numeric(df[c], errors="ignore")
+    for c in df.columns.intersection(DECIMAL_COLUMNS):
+        df[c] = df[c].astype(float)
     return df
 
 candles = load("daily_candle",
