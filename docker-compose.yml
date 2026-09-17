@@ -1,0 +1,24 @@
+# 로컬 개발 전용. 호스트 3306은 기존 mysqld가 점유 중이므로 13306으로 격리한다.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: stock-lab-mysql
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: stocklab
+      MYSQL_DATABASE: stock_lab
+      MYSQL_USER: stocklab
+      MYSQL_PASSWORD: stocklab
+      TZ: Asia/Seoul
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_0900_ai_ci
+      --default-time-zone=+09:00
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-ustocklab", "-pstocklab"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

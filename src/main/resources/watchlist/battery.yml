@@ -1,0 +1,6 @@
+category: battery
+description: 2차전지
+symbols:
+  - "373220"  # LG에너지솔루션
+  - "006400"  # 삼성SDI
+  - "247540"  # 에코프로비엠

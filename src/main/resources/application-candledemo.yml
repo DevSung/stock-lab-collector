@@ -1,0 +1,10 @@
+# 일봉을 받아 콘솔에 찍고 끝내는 프로파일(2단계 검증용).
+# 웹서버와 DB 없이 돌아야 러너가 끝나는 즉시 종료된다. 적재는 3단계다.
+spring:
+  main:
+    web-application-type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
+      - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration

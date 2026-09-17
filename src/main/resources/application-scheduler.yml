@@ -1,0 +1,10 @@
+# 상주 수집기 프로파일. 웹서버를 띄운 채 스케줄에 맞춰 배치를 돌린다.
+#   ./scripts/run.sh --spring.profiles.active=scheduler
+# actuator 로 살아있는지 확인: curl localhost:18080/actuator/health
+toss:
+  auth:
+    # 상주 프로세스는 기동 시 자격증명을 먼저 검증하는 편이 낫다.
+    eager-init: true
+stocklab:
+  schedule:
+    enabled: true

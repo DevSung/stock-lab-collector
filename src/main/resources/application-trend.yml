@@ -1,0 +1,7 @@
+# 수급 수집 전용 프로파일(5단계 검증용).
+spring:
+  main:
+    web-application-type: none
+toss:
+  auth:
+    eager-init: false

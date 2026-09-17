@@ -1,0 +1,9 @@
+# 과거 일봉 적재 전용 프로파일. 웹서버 없이 돌고, 끝나면 종료된다.
+# DB 는 당연히 필요하므로 tokencheck/candledemo 와 달리 제외하지 않는다.
+spring:
+  main:
+    web-application-type: none
+toss:
+  auth:
+    # 수집 러너가 첫 호출에서 알아서 발급한다. 워밍업까지 하면 토큰을 두 번 태운다.
+    eager-init: false

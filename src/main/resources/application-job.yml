@@ -1,0 +1,10 @@
+# 배치를 CLI 로 한 번 돌리는 프로파일. 스케줄러는 켜지 않는다(중복 실행 방지).
+spring:
+  main:
+    web-application-type: none
+toss:
+  auth:
+    eager-init: false
+stocklab:
+  schedule:
+    enabled: false

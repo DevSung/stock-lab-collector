@@ -1,0 +1,56 @@
+server:
+  # 8080 은 옆 프로젝트(onedayclass)가 사용하므로 격리한다.
+  port: 18080
+
+spring:
+  application:
+    name: stock-lab
+  datasource:
+    # 호스트 3306 은 로컬에 설치된 mysqld 가 쓰고 있다. docker-compose 가 13306 으로 띄운다.
+    url: jdbc:mysql://localhost:13306/stock_lab?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&rewriteBatchedStatements=true
+    username: stocklab
+    password: stocklab
+  jpa:
+    hibernate:
+      # 스키마는 Flyway 단독 관리. 엔티티가 스키마를 바꾸지 못하게 막는다.
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+toss:
+  base-url: https://openapi.tossinvest.com
+  # 기본값을 두지 않는다. 환경변수가 없으면 기동 자체가 실패해야 한다.
+  client-id: ${TOSS_CLIENT_ID}
+  client-secret: ${TOSS_CLIENT_SECRET}
+  auth:
+    # 기동 시 토큰을 미리 발급해 자격증명 오류를 즉시 드러낸다.
+    eager-init: true
+    # 만료 이 시간 전부터는 새 토큰으로 갈아탄다.
+    expiry-margin: 5m
+  http:
+    connect-timeout: 3s
+    read-timeout: 10s
+
+stocklab:
+  schedule:
+    # 기본은 꺼짐. CLI 로 한 번씩 돌릴 때 스케줄러까지 깨어나면 곤란하다.
+    # 상주 수집기로 쓰려면 true 로 켜고 앱을 띄워두면 된다.
+    enabled: false
+    stock-master-cron: "0 0 5 * * SUN"    # 종목 마스터: 일요일 05:00
+    top30-cron: "0 30 17 * * MON-FRI"     # TOP30 + 카테고리: 평일 17:30 (장 마감 후)
+    daily-collect-cron: "0 0 18 * * MON-FRI"  # 일일 수집: 평일 18:00
+    zone: Asia/Seoul
+    # 1일치를 받든 30일치를 받든 API 호출 횟수가 같다. 넉넉히 받아 구멍을 자동으로 메운다.
+    daily-lookback-days: 30
+    failure-threshold: 0.5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    dev.teolab.stocklab: DEBUG
