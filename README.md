@@ -204,6 +204,16 @@ infrastructure/  Spring · RestClient · JDBC. 안쪽을 참조해도 된다
 
 계층 규칙은 `LayerDependencyTest`(ArchUnit)가 강제한다.
 
+### JPA 를 쓰지 않는 이유
+
+적재는 전부 `JdbcTemplate` 배치 UPSERT다. JPA 의 `merge` 는 건당 SELECT 를 먼저 날려
+200건 페이지마다 200번 왕복하고, `ON DUPLICATE KEY UPDATE` 는 MySQL 전용 문법이라 JPA 로 표현되지 않는다.
+
+한때 `ddl-auto: validate` 로 스키마를 검사할 목적으로 엔티티를 뒀는데 걷어냈다.
+`validate` 는 매핑된 엔티티만 검사해서 테이블 7개 중 1개만 보호했고,
+정작 실제 위험인 **손으로 쓴 SQL 의 컬럼명 오타는 잡지 못했다.**
+그 역할은 실제 MySQL 에 붙는 통합 테스트(`*IT.kt`)가 한다 — 테이블 7개 전부 커버한다.
+
 토스 API의 실측 스펙과 rate limit·재시도 설계는 [docs/TOSS_API.md](docs/TOSS_API.md)에 있다.
 
 ## 테스트
@@ -223,5 +233,6 @@ DB를 쓰는 통합 테스트는 `@Transactional`로 롤백한다 — 없으면 
 - **스케줄러 스레드 풀이 1개다.** 일부러 늘리지 않았다. 배치가 겹치면 뒤엣것이 기다린다
 - **과거 시점 스냅샷이 없다.** 모든 적재가 덮어쓰기라 "그때 알 수 있었던 값"을 복원할 수 없다.
   엄밀한 백테스트가 필요하면 [docs/DATA.md](docs/DATA.md)의 point-in-time 항목을 볼 것
+- `ORM 없음.` 적재는 전부 손으로 쓴 SQL이다. 컬럼을 추가할 때 마이그레이션과 SQL 문자열을 같이 고쳐야 한다
 - `stock.currency`는 마켓에서 유추한 값이다(`stocks/all` 응답에 통화 필드가 없다). 국내만 수집하므로 항상 KRW
 - 상장폐지는 "전체 목록에서 사라짐"으로 판정한다. 마켓 조회가 하나라도 실패하면 폐지 표시를 건너뛴다

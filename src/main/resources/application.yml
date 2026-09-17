@@ -10,11 +10,6 @@ spring:
     url: jdbc:mysql://localhost:13306/stock_lab?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&rewriteBatchedStatements=true
     username: stocklab
     password: stocklab
-  jpa:
-    hibernate:
-      # 스키마는 Flyway 단독 관리. 엔티티가 스키마를 바꾸지 못하게 막는다.
-      ddl-auto: validate
-    open-in-view: false
   flyway:
     enabled: true
 
