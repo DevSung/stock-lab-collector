@@ -12,11 +12,14 @@ import dev.teolab.stocklab.market.infrastructure.persistence.DailyCandleJdbcStor
 import dev.teolab.stocklab.market.infrastructure.persistence.InvestorTradingJdbcStore
 import dev.teolab.stocklab.market.infrastructure.persistence.ShortSellingJdbcStore
 import org.springframework.context.annotation.Bean
+import dev.teolab.stocklab.config.Profiles
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.jdbc.core.JdbcTemplate
 import java.time.Clock
 
 @Configuration(proxyBeanMethods = false)
+@Profile(Profiles.REQUIRES_DATABASE)
 class MarketConfig {
 
     @Bean

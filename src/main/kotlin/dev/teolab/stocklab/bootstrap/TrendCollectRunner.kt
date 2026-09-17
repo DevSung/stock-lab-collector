@@ -19,7 +19,7 @@ import java.time.ZoneId
  * --watchlist 를 주면 watchlist 테이블의 모든 종목을 돈다. rate limiter 가 실제로 페이싱하는지 볼 수 있다.
  */
 @Component
-@Profile("trend")
+@Profile("trend & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 class TrendCollectRunner(
     private val collector: TradingTrendCollector,
     private val watchlistRepository: WatchlistRepository,

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
  *   ./scripts/run.sh --spring.profiles.active=watchlist --skip-top30  # yml 만
  */
 @Component
-@Profile("watchlist")
+@Profile("watchlist & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 class WatchlistSyncRunner(
     private val categorySync: CategoryWatchlistSync,
     private val top30Refresher: Top30Refresher,

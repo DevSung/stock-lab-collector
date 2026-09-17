@@ -19,7 +19,7 @@ import java.time.ZoneId
  * 같은 기간을 다시 돌리면 덮어쓴다. 액면분할로 수정주가가 재계산됐을 때 이렇게 복구한다.
  */
 @Component
-@Profile("collect")
+@Profile("collect & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 class CandleCollectRunner(
     private val collector: DailyCandleCollector,
     private val clock: Clock,

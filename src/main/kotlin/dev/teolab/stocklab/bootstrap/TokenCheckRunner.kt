@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
  * 토큰 원문은 어떤 경우에도 로그에 남기지 않는다.
  */
 @Component
-@Profile("tokencheck")
+@Profile("tokencheck & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 @Order(1)
 class TokenCheckRunner(
     private val tokenManager: TossTokenManager,

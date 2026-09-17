@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
  *   ./scripts/run.sh --spring.profiles.active=candledemo --symbol=000660 --count=10
  */
 @Component
-@Profile("candledemo")
+@Profile("candledemo & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 class CandlePrintRunner(
     private val candleReader: DailyCandleReader,
 ) : ApplicationRunner {

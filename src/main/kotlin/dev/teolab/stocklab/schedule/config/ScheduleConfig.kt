@@ -10,11 +10,14 @@ import dev.teolab.stocklab.watchlist.application.CategoryWatchlistSync
 import dev.teolab.stocklab.watchlist.application.Top30Refresher
 import dev.teolab.stocklab.watchlist.domain.WatchlistRepository
 import org.springframework.context.annotation.Bean
+import dev.teolab.stocklab.config.Profiles
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.EnableScheduling
 import java.time.Clock
 
 @Configuration(proxyBeanMethods = false)
+@Profile(Profiles.REQUIRES_DATABASE)
 @EnableScheduling
 class ScheduleConfig {
 

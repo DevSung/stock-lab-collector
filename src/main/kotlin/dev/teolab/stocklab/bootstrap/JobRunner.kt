@@ -18,7 +18,7 @@ import java.time.Duration
  *   ./scripts/run.sh --spring.profiles.active=job --job=log
  */
 @Component
-@Profile("job")
+@Profile("job & !test")  // 테스트 컨텍스트에서는 실행되지 않게 한다
 class JobRunner(
     private val job: DailyCollectionJob,
     private val logRepository: CollectionLogRepository,
